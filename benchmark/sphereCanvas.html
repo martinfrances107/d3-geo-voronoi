@@ -61,10 +61,10 @@
             perf.innerHTML = "Render Time: ...Calculating"
             points = {
                 type: "FeatureCollection",
-                features: d3.range(n_points).map(() => {
+                features: [[-10, -20], [20, -20], [20, 20], [-20, 20]].map((p) => {
                     return {
                         type: "Point",
-                        coordinates: [360 * Math.random(), 180 * Math.random() - 90]
+                        coordinates: [p[0], p[1]]
                     }
                 })
             };
@@ -102,7 +102,7 @@
             }
             const t1 = performance.now();
 
-            
+
             // Compute the mean elapsed time and compute the standard deviation based on the
             // the last 200 samples.
             elapsed = (t1 - t0);
