@@ -43,7 +43,7 @@
         const projection = d3.geoOrthographic();
         let context = canvas.getContext("2d");
 
-        let points;
+        let mp;
         let v;
         // Holds elapsed samples (use to compute the standard deviation).
         let elapsedArray;
@@ -56,17 +56,17 @@
             index = 0;
             elapsedArray = [];
             perf.innerHTML = "Render Time: ...Calculating"
-            points = {
-                type: "FeatureCollection",
-                features: d3.range(n_points).map(() => {
-                    return {
-                        type: "Point",
-                        coordinates: [360 * Math.random(), 180 * Math.random() - 90]
-                    }
-                })
-            };
-            v = d3.geoVoronoi()(points);
+            let points = [];
 
+            for (d in d3.range(n_points)) {
+                points.push([360 * Math.random(), 180 * Math.random() - 90]);
+            }
+
+            v = d3.geoVoronoi()(points);
+            mp = MultiPoint = {
+                type: "MultiPoint",
+                coordinates: points,
+            };
         }
 
         // Initial generation of points.
@@ -91,12 +91,11 @@
             // render points.
             context.fillStyle = "white";
             context.strokeStyle = "black";
-            for (const [key, value] of Object.entries(points.features)) {
-                context.beginPath();
-                pathGenerator(value);
-                context.fill();
-                context.stroke();
-            }
+            context.beginPath();
+            pathGenerator(mp);
+            context.fill();
+            context.stroke();
+
             const t1 = performance.now();
 
 
